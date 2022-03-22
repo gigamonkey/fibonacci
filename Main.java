@@ -16,7 +16,7 @@ class Main {
       var s = time(slow, i);
       var f = time(fast, i);
       assert s.answer == f.answer;
-      System.out.format("%2d | %12d | %11d | %11d\n", i, s.answer, s.millis, f.millis);
+      System.out.format("%2d | %12d | %11d | %11d\n", i, f.answer, s.millis, f.millis);
     }
   }
 

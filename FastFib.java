@@ -8,6 +8,6 @@ class FastFib implements Fibonacci {
   }
 
   private long helper(long n, long a, long b) {
-    return n == 0 ? a + b : helper(n - 1, a, a + b);
+    return n == 0 ? a + b : helper(n - 1, b, a + b);
   }
 }
