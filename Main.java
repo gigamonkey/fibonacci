@@ -10,13 +10,13 @@ class Main {
     var slow = new SlowFib();
     var fast = new FastFib();
 
-    System.out.format("%2s | %12s | slow millis | fast millis\n", "n", "fib(n)");
-    System.out.println("---+--------------+-------------+-------------");
+    System.out.format("%2s | %12s | slow seconds | fast seconds\n", "n", "fib(n)");
+    System.out.println("---+--------------+--------------+--------------");
     for (long i = 0; i < 51; i++) {
       var s = time(slow, i);
       var f = time(fast, i);
       assert s.answer == f.answer;
-      System.out.format("%2d | %12d | %11d | %11d\n", i, f.answer, s.millis, f.millis);
+      System.out.format("%2d | %12d | %12f | %12f\n", i, s.answer, s.millis/1000.0, f.millis/1000.0);
     }
   }
 
