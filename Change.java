@@ -1,8 +1,8 @@
 import java.util.Arrays;
 
 /**
- * An interface so we can make two different Fibonacci functions and
- * time them. See SlowFib and FastFib for the two implementations.
+ * An interface so we can make different change counting functions and
+ * time them.
  */
 interface Change {
   public static final int[] COINS = { 1, 5, 10, 25, 50 };

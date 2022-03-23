@@ -1,6 +1,6 @@
 /**
- * An interface so we can make two different Fibonacci functions and
- * time them. See SlowFib and FastFib for the two implementations.
+ * An interface so we can make different Fibonacci functions and time
+ * them.
  */
 interface Fibonacci {
   public static final Fibonacci SLOW = new Slow();
