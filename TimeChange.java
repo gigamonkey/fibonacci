@@ -18,12 +18,14 @@ class TimeChange {
       1000000,
       10000000,
       100000000,
-      //1000000000, OutOfMemory
+      1000000000,
     }) {
-      if (amt < 101) {
-        System.out.println(Change.SLOW.change(Change.COINS, amt));
-      }
-      System.out.println(Change.FAST.change(Change.COINS, amt));
+      System.out.format(
+        "%20d %20d %20d\n",
+        (amt < 101 ? Change.SLOW.change(Change.COINS, amt) : -1),
+        (amt <= 100000000 ? Change.FAST.change(Change.COINS, amt) : -1),
+        Change.FAST_SMALL.change(Change.COINS, amt)
+      );
     }
   }
 }

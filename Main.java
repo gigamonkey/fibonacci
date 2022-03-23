@@ -35,8 +35,8 @@ class Main {
   }
 
   static void compareChange() {
-    var slow = new Change.Slow();
-    var fast = new Change.Fast();
+    var slow = Change.SLOW;
+    var fast = Change.FAST_SMALL;
 
     System.out.format(
       "%8s | %12s | slow seconds | fast seconds\n",

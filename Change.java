@@ -8,6 +8,7 @@ interface Change {
   public static final int[] COINS = { 1, 5, 10, 25, 50 };
   public static final Change SLOW = new Slow();
   public static final Change FAST = new Fast();
+  public static final Change FAST_SMALL = new FastAndSmall();
 
   /**
    * Compute the number of ways to make change for amount with the
@@ -56,8 +57,47 @@ interface Change {
             (j == 0 ? 0 : table[j - 1][i]) + (i < d ? 0 : table[j][i - d]);
         }
       }
-
       return table[coins.length - 1][amount];
+    }
+  }
+
+  static class FastAndSmall implements Change {
+
+    // Faster than the semi-obvious recursive version because it only
+    // computes each required value once, filling out a table from the
+    // bottom up. I.e. this is essentially the dynamic programming
+    // version.
+    public long change(int[] coins, int amount) {
+      var table = table(coins);
+      var offsets = offsets(coins);
+
+      for (int amt = 0; amt <= amount; amt++) {
+        for (int c = 0; c < coins.length; c++) {
+          table[offsets[c] + (amt % coins[c])] +=
+            c == 0 ? 0 : table[offsets[c - 1] + (amt % coins[c - 1])];
+        }
+      }
+      return table[offsets[coins.length - 1] +
+        (amount % coins[coins.length - 1])];
+    }
+
+    private long[] table(int[] coins) {
+      // Build a table of essentially a circular buffer for each coin.
+      // Kick things off with 1 way to make change for amount 0 using
+      // just the first coin. Everything else will follow from there.
+      var table = new long[Arrays.stream(coins).sum()];
+      table[0] = 1;
+      return table;
+    }
+
+    private int[] offsets(int[] coins) {
+      var offsets = new int[coins.length];
+      var o = 0;
+      for (int i = 0; i < coins.length; i++) {
+        offsets[i] = o;
+        o += coins[i];
+      }
+      return offsets;
     }
   }
 }
