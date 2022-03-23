@@ -16,6 +16,10 @@ interface Change {
    */
   public long change(int[] coins, int amount);
 
+  /**
+   * Direct recursive solution. Works great but is slow for larger
+   * amounts because of all the duplicated work.
+   */
   static class Slow implements Change {
 
     public long change(int[] coins, int amount) {
@@ -30,24 +34,16 @@ interface Change {
     }
   }
 
+  /**
+   * Faster than the semi-obvious recursive version because it only
+   * computes each required value once, filling out a table from the
+   * bottom up. I.e. this is essentially the dynamic programming
+   * version.
+   */
   static class Fast implements Change {
 
-    // Faster than the semi-obvious recursive version because it only
-    // computes each required value once, filling out a table from the
-    // bottom up. I.e. this is essentially the dynamic programming
-    // version.
     public long change(int[] coins, int amount) {
-      // Make the table to be filled in. For each coin there's a row
-      // containing a slot for every amount from 0 to amount, inclusive.
-      // Each row will contain the number af ways to make change for up
-      // to that many coins.
-      var table = new long[coins.length][amount + 1];
-
-      // Initialize the number of ways to make change for amount 0 to 1
-      // for all numbers of coins.
-      for (int i = 0; i < table.length; i++) {
-        table[i][0] = 1;
-      }
+      var table = table(coins, amount);
 
       // Now fill in the table from the bottom up.
       for (int i = 1; i <= amount; i++) {
@@ -59,8 +55,29 @@ interface Change {
       }
       return table[coins.length - 1][amount];
     }
+
+    private long[][] table(int[] coins, int amount) {
+      // Make the table to be filled in. For each coin there's a row
+      // containing a slot for every amount from 0 to amount, inclusive.
+      // Each row will contain the number af ways to make change for up
+      // to that many coins.
+      var table = new long[coins.length][amount + 1];
+
+      // Initialize the number of ways to make change for amount 0 to 1
+      // for all numbers of coins.
+      for (int i = 0; i < table.length; i++) {
+        table[i][0] = 1;
+      }
+      return table;
+    }
   }
 
+  /**
+   * Basically the same as Fast but uses an amount of memory that
+   * depends only on the number and denominations of the coins.
+   * Possibly very slightly slower than Fast but can compute larger
+   * amounts without running out of memory.
+   */
   static class FastAndSmall implements Change {
 
     // Faster than the semi-obvious recursive version because it only
@@ -73,12 +90,13 @@ interface Change {
 
       for (int amt = 0; amt <= amount; amt++) {
         for (int c = 0; c < coins.length; c++) {
+          var p = c - 1;
           table[offsets[c] + (amt % coins[c])] +=
-            c == 0 ? 0 : table[offsets[c - 1] + (amt % coins[c - 1])];
+            c == 0 ? 0 : table[offsets[p] + (amt % coins[p])];
         }
       }
-      return table[offsets[coins.length - 1] +
-        (amount % coins[coins.length - 1])];
+      var last = coins.length - 1;
+      return table[offsets[last] + (amount % coins[last])];
     }
 
     private long[] table(int[] coins) {
