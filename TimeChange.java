@@ -6,9 +6,6 @@
 class TimeChange {
 
   public static void main(String[] args) {
-    var s = new SlowChange();
-    var f = new FastChange();
-
     for (var amt : new int[] {
       1,
       5,
@@ -20,11 +17,13 @@ class TimeChange {
       100000,
       1000000,
       10000000,
+      100000000,
+      //1000000000, OutOfMemory
     }) {
       if (amt < 101) {
-        System.out.println(s.change(Change.COINS, amt));
+        System.out.println(Change.SLOW.change(Change.COINS, amt));
       }
-      System.out.println(f.change(Change.COINS, amt));
+      System.out.println(Change.FAST.change(Change.COINS, amt));
     }
   }
 }

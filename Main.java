@@ -10,8 +10,8 @@ class Main {
   }
 
   static void compareFibs() {
-    var slow = new SlowFib();
-    var fast = new FastFib();
+    var slow = Fibonacci.SLOW;
+    var fast = Fibonacci.FAST;
 
     System.out.format(
       "%2s | %12s | slow seconds | fast seconds\n",
@@ -20,8 +20,9 @@ class Main {
     );
     System.out.println("---+--------------+--------------+--------------");
     for (long i = 0; i < 51; i++) {
-      var s = timeFib(slow, i);
-      var f = timeFib(fast, i);
+      final long n = i;
+      var s = time(() -> slow.fib(n));
+      var f = time(() -> fast.fib(n));
       assert s.answer() == f.answer();
       System.out.format(
         "%2d | %12d | %12f | %12f\n",
@@ -34,8 +35,8 @@ class Main {
   }
 
   static void compareChange() {
-    var slow = new SlowChange();
-    var fast = new FastChange();
+    var slow = new Change.Slow();
+    var fast = new Change.Fast();
 
     System.out.format(
       "%8s | %12s | slow seconds | fast seconds\n",
@@ -46,9 +47,9 @@ class Main {
       "---------+--------------+--------------+--------------"
     );
     for (int i = 0; i < 20; i++) {
-      int amount = (int) Math.pow(2, i);
-      var s = timeChange(slow, amount);
-      var f = timeChange(fast, amount);
+      final int amount = (int) Math.pow(2, i);
+      var s = time(() -> slow.change(Change.COINS, amount));
+      var f = time(() -> fast.change(Change.COINS, amount));
       assert s.answer() == f.answer();
       System.out.format(
         "%8d | %12d | %12f | %12f\n",
@@ -60,17 +61,16 @@ class Main {
     }
   }
 
-  static Timing timeFib(Fibonacci f, long n) {
+  static Timing time(Timeable t) {
     var start = System.currentTimeMillis();
-    var answer = f.fib(n);
+    var answer = t.run();
     var millis = System.currentTimeMillis() - start;
     return new Timing(answer, millis);
   }
 
-  static Timing timeChange(Change c, int n) {
-    var start = System.currentTimeMillis();
-    var answer = c.change(Change.COINS, n);
-    var millis = System.currentTimeMillis() - start;
-    return new Timing(answer, millis);
+  static interface Timeable {
+    public long run();
   }
+
+  static record Timing(long answer, long millis) {}
 }
