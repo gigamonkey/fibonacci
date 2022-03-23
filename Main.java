@@ -22,13 +22,13 @@ class Main {
     for (long i = 0; i < 51; i++) {
       var s = timeFib(slow, i);
       var f = timeFib(fast, i);
-      assert s.answer == f.answer;
+      assert s.answer() == f.answer();
       System.out.format(
         "%2d | %12d | %12f | %12f\n",
         i,
-        s.answer,
-        s.millis / 1000.0,
-        f.millis / 1000.0
+        s.answer(),
+        s.millis() / 1000.0,
+        f.millis() / 1000.0
       );
     }
   }
@@ -49,13 +49,13 @@ class Main {
       int amount = (int) Math.pow(2, i);
       var s = timeChange(slow, amount);
       var f = timeChange(fast, amount);
-      assert s.answer == f.answer;
+      assert s.answer() == f.answer();
       System.out.format(
         "%8d | %12d | %12f | %12f\n",
         amount,
-        s.answer,
-        s.millis / 1000.0,
-        f.millis / 1000.0
+        s.answer(),
+        s.millis() / 1000.0,
+        f.millis() / 1000.0
       );
     }
   }
